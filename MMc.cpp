@@ -8,8 +8,11 @@
 #define COTE 3 
 #define DEPLACEMENT_ORDINATEUR 'O' 
 #define DEPLACEMENT_HUMAIN 'X' 
-#define victory=0;
+#include "EvalPerf.hpp"
+#include "EvalPerf.cpp"
 
+int nb= 0;
+int victory = 0;
 struct Déplacement { 
     int ligne, colonne; 
 }; 
@@ -201,6 +204,7 @@ void déclarerVainqueur(int tourDe)
         printf("ORDINATEUR a gagné\n"); 
     else
         printf("HUMAIN a gagné\n"); 
+        victory++;
 } 
 
 // Vérifie si une ligne est complétée
@@ -328,7 +332,19 @@ void jouerTicTacToe(int tourDe)
 } 
 
 int main() 
-{ 
-    jouerTicTacToe(ORDI); 
+{   
+    EvalPerf PE;
+    PE.start();
+    for(int i=0;i<100;i++){
+        jouerTicTacToe(ORDI); 
+        nb++;
+    }
+    PE.stop();
+    std::cout<<"nbr cycles : "<<PE.nbCycles() <<std::endl;
+    std::cout<<"nbr secondes : "<< PE.get_seconds() <<std::endl ;
+    std::cout<<"nbr millisecondes : "<< PE.get_milliseconds() <<std::endl;
+
+    std::cout<<"Taux victoire joueur qui commence: "<<(float)victory/nb<<std::endl;
+    std::cout<<"Taux victoire joueur qui commence: "<<(float)(1.0-((float)victory/(float)nb))<<std::endl;
     return 0; 
 }
