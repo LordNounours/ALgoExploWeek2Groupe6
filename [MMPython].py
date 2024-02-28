@@ -111,3 +111,27 @@ v = minimax(TicTacToeBoard(), 1, 1)
 end = t.time()
 
 print(end - start)
+
+
+total_games = 0
+wins = 0
+losses = 0
+draws = 0
+
+for initial_board in boards:
+    result = minimax(initial_board, initial_board.turn, initial_board.turn)
+    total_games += 1
+    if result[0] == 1:
+        wins += 1
+    elif result[0] == -1:
+        losses += 1
+    else:
+        draws += 1
+
+win_percentage = (wins / total_games) * 100
+loss_percentage = (losses / total_games) * 100
+draw_percentage = (draws / total_games) * 100
+
+print(f"Pourcentage de victoires : {win_percentage}%")
+print(f"Pourcentage de défaites : {loss_percentage}%")
+print(f"Pourcentage de matchs nuls : {draw_percentage}%")
