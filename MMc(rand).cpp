@@ -13,6 +13,7 @@
 
 int nb= 0;
 int victory = 0;
+int noeud=0;
 struct Déplacement { 
     int ligne, colonne; 
 }; 
@@ -33,6 +34,7 @@ bool mouvementsRestants(char plateau[3][3])
 int evaluer(char b[3][3]) 
 { 
     // Vérifie les lignes
+  
     for (int ligne = 0; ligne < 3; ligne++) { 
         if (b[ligne][0] == b[ligne][1] && b[ligne][1] == b[ligne][2]) { 
             if (b[ligne][0] == joueur) 
@@ -283,6 +285,7 @@ void jouerTicTacToe(int tourDe)
                 } 
             } 
             struct Déplacement mouvement = trouverMeilleurMouvement(plateauTemp); 
+              noeud++;
             x = mouvement.ligne; 
             y = mouvement.colonne; 
 
@@ -308,6 +311,7 @@ void jouerTicTacToe(int tourDe)
                 } 
             } 
             struct Déplacement mouvement = trouverMeilleurMouvement(plateauTemp); 
+              //noeud++;
             x = mouvement.ligne; 
             y = mouvement.colonne; 
 
@@ -335,7 +339,7 @@ int main()
 {   
     EvalPerf PE;
     PE.start();
-    for(int i=0;i<100;i++){
+    for(int i=0;i<1000;i++){
         jouerTicTacToe(ORDI); 
         nb++;
     }
@@ -346,5 +350,6 @@ int main()
 
     std::cout<<"Taux victoire joueur qui commence: "<<(float)victory/nb<<std::endl;
     std::cout<<"Taux victoire joueur qui enchaine: "<<(float)(1.0-((float)victory/(float)nb))<<std::endl;
+    std::cout<<"Noeuds visités moyens :  "<<(float)(float)noeud/(float)nb<<std::endl;
     return 0; 
 }
