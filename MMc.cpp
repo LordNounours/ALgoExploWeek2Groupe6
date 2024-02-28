@@ -32,9 +32,9 @@ int evaluer(char b[3][3])
     for (int ligne = 0; ligne < 3; ligne++) { 
         if (b[ligne][0] == b[ligne][1] && b[ligne][1] == b[ligne][2]) { 
             if (b[ligne][0] == joueur) 
-                return +10; 
+                return +1; 
             else if (b[ligne][0] == adversaire) 
-                return -10; 
+                return -1; 
         } 
     } 
 
@@ -42,25 +42,25 @@ int evaluer(char b[3][3])
     for (int colonne = 0; colonne < 3; colonne++) { 
         if (b[0][colonne] == b[1][colonne] && b[1][colonne] == b[2][colonne]) { 
             if (b[0][colonne] == joueur) 
-                return +10; 
+                return +1; 
             else if (b[0][colonne] == adversaire) 
-                return -10; 
+                return -1; 
         } 
     } 
 
     // Vérifie les diagonales
     if (b[0][0] == b[1][1] && b[1][1] == b[2][2]) { 
         if (b[0][0] == joueur) 
-            return +10; 
+            return +1; 
         else if (b[0][0] == adversaire) 
-            return -10; 
+            return -1; 
     } 
 
     if (b[0][2] == b[1][1] && b[1][1] == b[2][0]) { 
         if (b[0][2] == joueur) 
-            return +10; 
+            return +1; 
         else if (b[0][2] == adversaire) 
-            return -10; 
+            return -1; 
     } 
 
     return 0; 
@@ -71,10 +71,10 @@ int minimax(char plateau[3][3], int profondeur, bool estMax)
 { 
     int score = evaluer(plateau); 
 
-    if (score == 10) 
+    if (score == 1) 
         return score; 
 
-    if (score == -10) 
+    if (score == -1) 
         return score; 
 
     if (mouvementsRestants(plateau) == false) 
