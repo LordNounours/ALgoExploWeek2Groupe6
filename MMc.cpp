@@ -345,6 +345,6 @@ int main()
     std::cout<<"nbr millisecondes : "<< PE.get_milliseconds() <<std::endl;
 
     std::cout<<"Taux victoire joueur qui commence: "<<(float)victory/nb<<std::endl;
-    std::cout<<"Taux victoire joueur qui commence: "<<(float)(1.0-((float)victory/(float)nb))<<std::endl;
+    std::cout<<"Taux victoire joueur qui enchaine: "<<(float)(1.0-((float)victory/(float)nb))<<std::endl;
     return 0; 
 }
