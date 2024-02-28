@@ -67,7 +67,6 @@ def loadBoardsFromFile(filename):
                         board[i][j] = 1
                     elif line[1 + 3 * i + j] == 'O':
                         board[i][j] = 2
-            # Afficher la ligne parsée
             print("Ligne parsée :", line.strip())
             boards.append(TicTacToeBoard(board, turn))
 

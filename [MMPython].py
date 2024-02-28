@@ -15,7 +15,7 @@ class TicTacToeBoard:
     def make_move(self, x: int, y: int):
         new_board = np.array(self.board, dtype=int)
         new_board[x][y] = self.turn
-        return TicTacToeBoard(new_board, 3 - self.turn) # Corrected turn calculation
+        return TicTacToeBoard(new_board, 3 - self.turn) 
 
     def printToFile(self, file: TextIOWrapper):
         file.write(str(self) + '\n')
@@ -80,7 +80,6 @@ with open("dataset.txt", "r") as dataset:
                     board[i][j] = 1
                 elif line[1 + 3 * i + j] == 'O':
                     board[i][j] = 2
-        # Afficher la ligne parsée
         print(f"Ligne parsée : {line.strip()}")
         boards.append(TicTacToeBoard(np.array(board), turn))
 

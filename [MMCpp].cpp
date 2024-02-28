@@ -15,10 +15,10 @@ public:
     TicTacToeBoard(std::vector<std::vector<int>> board = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, int turn = 1)
         : board(board), turn(turn) {}
 
-    TicTacToeBoard make_move(int x, int y) const { // Ajout de const ici
+    TicTacToeBoard make_move(int x, int y) const { 
         std::vector<std::vector<int>> new_board = board;
         new_board[x][y] = turn;
-        return TicTacToeBoard(new_board, 3 - turn); // Corrected turn calculation
+        return TicTacToeBoard(new_board, 3 - turn); 
     }
 
     std::string to_string() const {
@@ -86,7 +86,7 @@ public:
 
 std::vector<TicTacToeBoard> boards;
 
-void loadBoardsFromFile(const std::string& filename) { // Modification ici
+void loadBoardsFromFile(const std::string& filename) { 
     std::ifstream dataset(filename);
     std::string line;
     while (std::getline(dataset, line)) {
@@ -108,7 +108,7 @@ void loadBoardsFromFile(const std::string& filename) { // Modification ici
     }
 }
 
-std::pair<int, int> minimax(const TicTacToeBoard& board, int playerCurrent, int turn) { // Modification ici
+std::pair<int, int> minimax(const TicTacToeBoard& board, int playerCurrent, int turn) { 
     int v = board.isFinal();
     if (v != -1) {
         return {(v == turn ? 1 : -1), 0};
@@ -143,7 +143,7 @@ int main() {
     std::cout << minimax(boards[0], boards[0].turn, boards[0].turn).second << std::endl;
 
     clock_t start = clock();
-    auto v = minimax(TicTacToeBoard(), 1, 1); // Modification ici
+    auto v = minimax(TicTacToeBoard(), 1, 1); 
     clock_t end = clock();
 
     std::cout << "Temps d'exécution : " << (double(end - start) / CLOCKS_PER_SEC) << " secondes" << std::endl;
