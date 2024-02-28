@@ -7,20 +7,24 @@
 #include <ctime>
 #include <unordered_map>
 
+// Classe représentant le plateau de jeu de Tic Tac Toe
 class TicTacToeBoard {
 public:
-    std::vector<std::vector<int>> board;
-    int turn;
+    std::vector<std::vector<int>> board; // Plateau de jeu
+    int turn; // Tour du joueur actuel
 
+    // Constructeur de la classe
     TicTacToeBoard(std::vector<std::vector<int>> board = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}, int turn = 1)
         : board(board), turn(turn) {}
 
+    // Méthode pour effectuer un mouvement sur le plateau
     TicTacToeBoard make_move(int x, int y) const { 
         std::vector<std::vector<int>> new_board = board;
         new_board[x][y] = turn;
         return TicTacToeBoard(new_board, 3 - turn); 
     }
 
+    // Méthode pour convertir le plateau en une chaîne de caractères pour l'affichage
     std::string to_string() const {
         std::string s = (turn == 1 ? "X" : "O");
         for (const auto& row : board) {
@@ -32,6 +36,7 @@ public:
         return s;
     }
 
+    // Méthode pour générer tous les plateaux possibles après un mouvement
     std::vector<TicTacToeBoard> getChildren() const {
         std::vector<TicTacToeBoard> moves;
         for (int i = 0; i < 3; ++i) {
@@ -44,6 +49,7 @@ public:
         return moves;
     }
 
+    // Méthode pour vérifier si le jeu est terminé
     int isFinal() const {
         bool found_zero = false;
         for (const auto& row : board) {
@@ -75,17 +81,21 @@ public:
         return -1;
     }
 
+    // Méthode pour comparer deux instances de TicTacToeBoard
     bool operator==(const TicTacToeBoard& other) const {
         return board == other.board && turn == other.turn;
     }
 
+    // Méthode pour obtenir un hash d'une instance de TicTacToeBoard
     size_t hash() const {
         return std::hash<std::string>()(to_string());
     }
 };
 
+// Liste pour stocker les plateaux de jeu chargés
 std::vector<TicTacToeBoard> boards;
 
+// Fonction pour charger les plateaux de jeu à partir d'un fichier
 void loadBoardsFromFile(const std::string& filename) { 
     std::ifstream dataset(filename);
     std::string line;
@@ -108,6 +118,7 @@ void loadBoardsFromFile(const std::string& filename) {
     }
 }
 
+// Fonction pour implémenter l'algorithme Minimax
 std::pair<int, int> minimax(const TicTacToeBoard& board, int playerCurrent, int turn) { 
     int v = board.isFinal();
     if (v != -1) {
@@ -153,7 +164,6 @@ int main() {
     int losses = 0;
     int draws = 0;
 
-
     for (const auto& initial_board : boards) {
         auto result = minimax(initial_board, initial_board.turn, initial_board.turn);
         total_games += 1;
@@ -176,3 +186,4 @@ int main() {
 
     return 0;
 }
+

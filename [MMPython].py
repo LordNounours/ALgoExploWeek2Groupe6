@@ -4,22 +4,31 @@ import numpy as np
 from math import inf
 import time as t
 
+# Classe représentant le plateau de jeu de Tic Tac Toe
 class TicTacToeBoard:
     def __init__(self, board=None, turn=1):
+        # Si aucun plateau n'est fourni, initialise un nouveau plateau vide
         if board is None:
             self.board = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
         else:
             self.board = board
+        # Initialise le tour du joueur actuel
         self.turn = turn
 
+    # Méthode pour effectuer un mouvement sur le plateau
     def make_move(self, x: int, y: int):
+        # Crée une copie du plateau actuel
         new_board = np.array(self.board, dtype=int)
+        # Place le symbole du joueur actuel à la position spécifiée
         new_board[x][y] = self.turn
+        # Retourne un nouvel objet TicTacToeBoard avec le nouveau plateau et le tour suivant
         return TicTacToeBoard(new_board, 3 - self.turn) 
 
+    # Méthode pour écrire le plateau de jeu dans un fichier
     def printToFile(self, file: TextIOWrapper):
         file.write(str(self) + '\n')
 
+    # Méthode pour convertir le plateau en une chaîne de caractères pour l'affichage
     def __str__(self):
         s = f'{"X" if self.turn == 1 else "O"}'
         for row in self.board:
@@ -28,9 +37,11 @@ class TicTacToeBoard:
                 s += f'{"X" if cell == 1 else "O" if cell == 2 else " "}'
         return s
 
+    # Méthode pour obtenir une représentation du plateau de jeu
     def __repr__(self):
         return self.__str__()
 
+    # Méthode pour générer tous les plateaux possibles après un mouvement
     def getChildren(self) -> List['TicTacToeBoard']:
         moves = []
         for i in range(3):
@@ -39,6 +50,7 @@ class TicTacToeBoard:
                     moves.append(self.make_move(i, j))
         return moves
 
+    # Méthode pour vérifier si le jeu est terminé
     def isFinal(self) -> int:
         found_zero = False
         for row in self.board:
@@ -63,13 +75,18 @@ class TicTacToeBoard:
 
         return -1
 
+    # Méthode pour comparer deux instances de TicTacToeBoard
     def __eq__(self, other: 'TicTacToeBoard'):
         return np.array_equal(self.board, other.board) and self.turn == other.turn
 
+    # Méthode pour obtenir un hash d'une instance de TicTacToeBoard
     def __hash__(self):
         return hash(str(self))
 
+# Liste pour stocker les plateaux de jeu chargés
 boards: List[TicTacToeBoard] = []
+
+# Charge les plateaux de jeu à partir d'un fichier
 with open("dataset.txt", "r") as dataset:
     for line in dataset.readlines():
         board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
@@ -83,6 +100,7 @@ with open("dataset.txt", "r") as dataset:
         print(f"Ligne parsée : {line.strip()}")
         boards.append(TicTacToeBoard(np.array(board), turn))
 
+# Fonction pour implémenter l'algorithme Minimax
 def minimax(board: TicTacToeBoard, playerCurrent: int, turn: int) -> Tuple[int, int]:
     if v := board.isFinal() != -1:
         return (1 if v == turn else -1 if v != 0 else 0, 0)
@@ -102,21 +120,26 @@ def minimax(board: TicTacToeBoard, playerCurrent: int, turn: int) -> Tuple[int, 
                 m = (rslt[0], i)
         return m
 
+# Affiche le premier plateau de jeu chargé
 print(boards[0], "\n")
+# Affiche le meilleur mouvement pour le premier plateau de jeu
 print(minimax(boards[0], boards[0].turn, boards[0].turn)[1])
 
+# Mesure le temps d'exécution de l'algorithme Minimax sur un nouveau plateau
 start = t.time()
 v = minimax(TicTacToeBoard(), 1, 1)
 end = t.time()
 
+# Affiche le temps d'exécution
 print(end - start)
 
-
+# Initialise les compteurs pour les statistiques
 total_games = 0
 wins = 0
 losses = 0
 draws = 0
 
+# Exécute l'algorithme Minimax sur chaque plateau chargé et compte les résultats
 for initial_board in boards:
     result = minimax(initial_board, initial_board.turn, initial_board.turn)
     total_games += 1
@@ -127,10 +150,13 @@ for initial_board in boards:
     else:
         draws += 1
 
+# Calcule les pourcentages de victoires, défaites et matchs nuls
 win_percentage = (wins / total_games) * 100
 loss_percentage = (losses / total_games) * 100
 draw_percentage = (draws / total_games) * 100
 
+# Affiche les statistiques
 print(f"Pourcentage de victoires : {win_percentage}%")
 print(f"Pourcentage de défaites : {loss_percentage}%")
 print(f"Pourcentage de matchs nuls : {draw_percentage}%")
+
