@@ -2,7 +2,7 @@
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <time.h> 
-
+#include <random>
 #define ORDI 1 
 #define HUMAIN 2 
 #define COTE 3 
@@ -248,15 +248,21 @@ void jouerTicTacToe(int tourDe)
 { 
     char plateau[COTE][COTE]; 
     int mouvements[COTE * COTE]; 
+    std::random_device rd; 
+    std::mt19937 gen(rd()); 
+    std::uniform_int_distribution<> dist(0, 2); 
 
+    
     initialiser(plateau, mouvements); 
     afficherInstructions(); 
+    int random_number = dist(gen); 
+    int random_number2 = dist(gen); 
+    plateau[random_number][random_number2]='X';
 
     int indexMouvement = 0, x, y; 
 
     while (!jeuTerminé(plateau) && indexMouvement != COTE * COTE) { 
         if (tourDe == ORDI) { 
-
             char plateauTemp[3][3]; 
             for (int i = 0; i < 3; i++) { 
                 for (int j = 0; j < 3; j++) { 
@@ -282,28 +288,29 @@ void jouerTicTacToe(int tourDe)
             tourDe = HUMAIN; 
         } 
         else if (tourDe == HUMAIN) { 
-            int mouvement; 
-            printf("Entrez votre mouvement (1-9): "); 
-            scanf("%d", &mouvement); 
-            if (mouvement < 1 || mouvement > 9) { 
-                printf("Entrée invalide! Veuillez entrer un nombre entre 1 et 9.\n"); 
-                continue; 
-            } 
-            x = (mouvement - 1) / COTE; 
-            y = (mouvement - 1) % COTE; 
-            if (plateau[x][y] == ' ') { 
-                plateau[x][y] = DEPLACEMENT_HUMAIN; 
-                afficherPlateau(plateau); 
-                indexMouvement++; 
-                if (jeuTerminé(plateau)) { 
-                    déclarerVainqueur(HUMAIN); 
-                    return; 
+            char plateauTemp[3][3]; 
+            for (int i = 0; i < 3; i++) { 
+                for (int j = 0; j < 3; j++) { 
+                    if (plateau[i][j] == 'X') { 
+                        plateauTemp[i][j] = 'x'; 
+                    } 
+                    else if (plateau[i][j] == 'O') { 
+                        plateauTemp[i][j] = 'o'; 
+                    } 
+                    else { 
+                        plateauTemp[i][j] = '_'; 
+                    } 
                 } 
-                tourDe = ORDI; 
             } 
-            else { 
-                printf("La cellule %d est déjà occupée. Réessayez.\n", mouvement); 
-            } 
+            struct Déplacement mouvement = trouverMeilleurMouvement(plateauTemp); 
+            x = mouvement.ligne; 
+            y = mouvement.colonne; 
+
+            plateau[x][y] = DEPLACEMENT_HUMAIN; 
+            printf("ORDINATEUR a mis un %c dans la cellule %d %d\n", DEPLACEMENT_HUMAIN, x, y); 
+            afficherPlateau(plateau); 
+            indexMouvement++; 
+            tourDe = ORDI; 
         } 
     } 
 
