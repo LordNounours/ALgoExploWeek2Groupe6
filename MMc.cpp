@@ -8,6 +8,7 @@
 #define COTE 3 
 #define DEPLACEMENT_ORDINATEUR 'O' 
 #define DEPLACEMENT_HUMAIN 'X' 
+#define victory=0;
 
 struct Déplacement { 
     int ligne, colonne; 
